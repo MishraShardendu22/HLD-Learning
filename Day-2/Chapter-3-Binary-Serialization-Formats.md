@@ -232,13 +232,13 @@ struct User {
 
 ---
 
-#### Pros -
+#### Pros
 
 - **Multiple protocols**: Choose binary, compact, or JSON
 - **Built-in RPC**: No need for separate framework
 - **More control**: `required`/`optional` modifiers
 
-#### Cons -
+#### Cons
 
 - **Less popular**: Smaller community than Protobuf
 - **Complexity**: More features = more complexity
@@ -333,8 +333,7 @@ record User {
 
 #### Backward Compatibility
 
-**New schema can read old data** -
-
+#### New schema can read old data
 Rules:
 
 1. **Add fields with defaults**: New fields must have default values
@@ -342,8 +341,7 @@ Rules:
 
 #### Forward Compatibility
 
-**Old schema can read new data** -
-
+#### Old schema can read new data
 Rules:
 
 1. **Add optional fields**: Old schema ignores unknown fields (requires default in writer schema)

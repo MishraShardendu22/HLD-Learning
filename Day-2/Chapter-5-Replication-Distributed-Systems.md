@@ -147,7 +147,7 @@ SELECT * FROM users WHERE id = 1;
 
 The leader **waits** for at least one follower to confirm the write before acknowledging to the client.
 
-### How It Works -
+### How It Works
 
 ```md
 Client           Leader          Follower 1
@@ -234,7 +234,7 @@ Client           Leader          Follower 1
 - Email actually delivers seconds/minutes later
 - You don't wait to see if recipient received it
 
-#### Characteristics -
+#### Characteristics
 
 - **Low latency**: Client gets instant response
 - **Higher availability**: Writes succeed even if follower is down
@@ -242,13 +242,13 @@ Client           Leader          Follower 1
 
 ---
 
-### Pros -
+### Pros
 
 - **Lower latency**: Client doesn't wait for followers
 - **Higher availability**: Writes succeed even if followers are slow/down
 - **Higher throughput**: Not limited by follower speed
 
-### Cons -
+### Cons
 
 - **Potential data loss**: If leader crashes before replicating, recent writes are lost
 - **Replication lag**: Followers may be seconds/minutes behind
@@ -445,7 +445,7 @@ Clients automatically connect to new leader.
 - Leader crashes **before** replicating recent writes
 - Those writes are lost forever
 
-#### Example -
+#### Example
 
 ```md
 t=0: Leader receives write: "UPDATE balance = 100"
@@ -464,7 +464,7 @@ t=2: Leader CRASHES (before replicating)
 
 ### Challenge 2: **Split-Brain (Multiple Leaders)**
 
-#### Problem -
+#### Problem
 
 Network partition causes both old and new leader to accept writes simultaneously.
 
@@ -481,7 +481,7 @@ Partition:
 
 Both leaders accept writes → **data diverges** → **conflict!**
 
-#### Solutions -
+#### Solutions
 
 - **Quorum**: Require majority consensus (e.g., Raft)
 - **Fencing tokens**: Leader has a unique token; old token is rejected
@@ -518,8 +518,7 @@ Both leaders accept writes → **data diverges** → **conflict!**
 - Follower applies write at t=10 (10-second lag)
 - Client reads from follower at t=5 → **stale data!**
 
-**Solutions** -
-
+#### Solutions
 - **Read from leader**: For critical reads requiring fresh data
 - **Monotonic reads**: Ensure subsequent reads don't go backward in time
 - **Read-your-writes consistency**: Route user's reads to leader temporarily after write

@@ -12,19 +12,17 @@ When your application evolves, you need to handle schema changes gracefully. The
 
 ### 1.1 Relational Database (Schema-on-Write)
 
-**What** - is Schema-on-Write?
+### What is Schema-on-Write?
 
 In traditional relational databases, the **schema is enforced when data is written**. You must define the structure upfront (tables, columns, types, constraints).
 
-**Characteristics** -
-
+#### Characteristics
 - **Explicit schema**: You define tables and columns before inserting data
 - **Strict validation**: Database rejects data that doesn't match the schema
 - **Migrations required**: Schema changes need ALTER TABLE statements
 - **Strong consistency**: All data conforms to the current schema
 
-**Example** -
-
+#### Example
 ```sql
 -- Original schema
 CREATE TABLE users (
@@ -37,14 +35,12 @@ CREATE TABLE users (
 ALTER TABLE users ADD COLUMN age INT;
 ```
 
-**Pros** -
-
+#### Pros
 - Data integrity and validation at write time
 - Clear structure and documentation
 - Optimized query planning
 
-**Cons** -
-
+#### Cons
 - Schema changes can be slow and risky on large tables
 - Less flexible for evolving requirements
 - Downtime or careful coordination needed for migrations
@@ -53,19 +49,17 @@ ALTER TABLE users ADD COLUMN age INT;
 
 ### 1.2 Schema-on-Read (NoSQL/Document Databases)
 
-**What** - is Schema-on-Read?
+### What is Schema-on-Read?
 
 The schema is **applied when data is read**, not when it's written. The database stores semi-structured data (like JSON documents) without enforcing a rigid schema upfront.
 
-**Characteristics** -
-
+#### Characteristics
 - **Flexible schema**: Each document can have different fields
 - **No upfront schema**: Write data without predefined structure
 - **Application-level validation**: Your code handles schema interpretation
 - **Easy evolution**: Add new fields without migrations
 
-**Example** -
-
+#### Example
 ```javascript
 // Original document
 { "id": 1, "name": "Alice", "email": "alice@example.com" }
@@ -74,14 +68,12 @@ The schema is **applied when data is read**, not when it's written. The database
 { "id": 2, "name": "Bob", "email": "bob@example.com", "age": 30 }
 ```
 
-**Pros** -
-
+#### Pros
 - Fast schema evolution
 - No downtime for schema changes
 - Better for rapidly changing requirements
 
-**Cons** -
-
+#### Cons
 - Data quality issues if not validated properly
 - Application logic becomes more complex
 - Inconsistent data structures possible
@@ -94,25 +86,22 @@ When deploying new versions of your application that change the schema, you need
 
 ### 2.1 Server-Side Rolling Updates
 
-**What** - is a Rolling Update?
+### What is a Rolling Update?
 
 Instead of updating all servers at once (which causes downtime), you update them **gradually** — one or a few at a time.
 
-**Process** -
-
+#### Process
 1. Deploy new version to Server 1 (others still run old version)
 2. Monitor for issues
 3. Deploy to Server 2, 3, etc., progressively
 4. Eventually all servers run the new version
 
-**Benefits** -
-
+#### Benefits
 - **Zero downtime**: Some servers always available
 - **Easy rollback**: If issues arise, stop the rollout
 - **Lower risk**: Problems affect fewer users initially
 
-**Requirements** -
-
+#### Requirements
 - **Backward compatibility**: New code must read old data
 - **Forward compatibility**: Old code must handle new data (or ignore it)
 
@@ -120,18 +109,16 @@ Instead of updating all servers at once (which causes downtime), you update them
 
 ### 2.2 Client-Side Rolling Updates
 
-**What** - is Client-Side Rolling Update?
+### What is Client-Side Rolling Update?
 
 Mobile apps, desktop software, and browser apps update at different times — users control when they upgrade.
 
-**Challenges** -
-
+#### Challenges
 - **Long coexistence**: Old and new versions run simultaneously for weeks/months
 - **API versioning**: Backend must support multiple client versions
 - **Graceful degradation**: Old clients should still work (maybe with reduced features)
 
-**Example** -
-
+#### Example
 - WhatsApp releases v2.0 with new features
 - Some users update immediately, others weeks later
 - Backend must support both v1.0 and v2.0 message formats
@@ -142,21 +129,21 @@ Mobile apps, desktop software, and browser apps update at different times — us
 
 ### 3.1 Backward Compatibility
 
-**Definition** -
-
-**New code can read data written by old code.**
-
-**Why** - It Matters
+#### Definition
+#### New code can read data written by old code.
+### Why
+It Matters
 
 When you deploy a new version, it must be able to process data created by the previous version.
 
-**Example** -
-
+#### Example
 - Old version stores: `{ "name": "Alice" }`
 - New version expects: `{ "name": "Alice", "age": 25 }`
 - New version must handle missing `age` field (use default or null)
 
-**How** - to Achieve
+### How
+
+to Achieve
 
 - **Optional fields**: New fields should have defaults
 - **Ignore unknown fields**: Don't fail on missing data
@@ -166,21 +153,21 @@ When you deploy a new version, it must be able to process data created by the pr
 
 ### 3.2 Forward Compatibility
 
-**Definition** -
-
-**Old code can read data written by new code.**
-
-**Why** - It Matters
+#### Definition
+#### Old code can read data written by new code.
+### Why
+It Matters
 
 During rolling updates, old servers still running must handle data from updated servers.
 
-**Example** -
-
+#### Example
 - New version stores: `{ "name": "Alice", "age": 25, "preferences": {...} }`
 - Old version expects: `{ "name": "Alice" }`
 - Old version must ignore unknown fields (`age`, `preferences`)
 
-**How** - to Achieve
+### How
+
+to Achieve
 
 - **Ignore unknown fields**: Old code skips fields it doesn't recognize
 - **Additive changes only**: Never remove or rename required fields
@@ -225,36 +212,35 @@ During rolling updates, old servers still running must handle data from updated 
 
 ### 5.1 Language-Specific Formats
 
-**Examples** -
-
+#### Examples
 - **Java**: `java.io.Serializable`
 - **Python**: `pickle`
 - **Ruby**: `Marshal`
 
-**Problems** -
-
+#### Problems
 - **Language lock-in**: Only works with one language
 - **Security risks**: Deserialization can execute arbitrary code
 - **Versioning issues**: Hard to maintain backward/forward compatibility
 - **Inefficient**: Often verbose and slow
 
-**When** - to Use
+### When
+
+to Use
 
 - Quick prototyping within a single language
 - Internal tools with no cross-language requirements
 
-**❌ Not recommended for production systems** -
+**❌ Not recommended for production systems**
 
 ---
 
 ### 5.2 JSON (JavaScript Object Notation)
 
-**What** - is JSON?
+### What is JSON?
 
 A text-based, human-readable format widely used for web APIs.
 
-**Example** -
-
+#### Example
 ```json
 {
   "name": "Alice",
@@ -263,22 +249,21 @@ A text-based, human-readable format widely used for web APIs.
 }
 ```
 
-**Pros** -
-
+#### Pros
 - **Human-readable**: Easy to debug
 - **Language-independent**: Supported by all major languages
 - **Web-friendly**: Native JavaScript support
 - **Flexible schema**: Easy to add/remove fields
 
-**Cons** -
-
+#### Cons
 - **No schema enforcement**: Easy to make mistakes
 - **Type ambiguity**: No distinction between integer and float
 - **Inefficient**: Text encoding is verbose (larger size)
 - **No binary data support**: Must base64-encode binaries
 - **Precision issues**: Numbers can lose precision (e.g., large integers)
 
-**Example** - Problem
+### Example
+Problem
 
 ```json
 // JSON doesn't distinguish between int and float
@@ -292,12 +277,11 @@ A text-based, human-readable format widely used for web APIs.
 
 ### 5.3 XML (eXtensible Markup Language)
 
-**What** - is XML?
+### What is XML?
 
 A verbose, tag-based text format popular in enterprise systems.
 
-**Example** -
-
+#### Example
 ```xml
 <user>
   <name>Alice</name>
@@ -306,14 +290,12 @@ A verbose, tag-based text format popular in enterprise systems.
 </user>
 ```
 
-**Pros** -
-
+#### Pros
 - **Self-documenting**: Tags describe the data
 - **Schema validation**: XSD (XML Schema Definition) for structure enforcement
 - **Namespaces**: Avoid naming conflicts
 
-**Cons** -
-
+#### Cons
 - **Extremely verbose**: More bytes than JSON for same data
 - **Complex parsing**: Slower to parse than JSON
 - **Type ambiguity**: Everything is a string unless specified
@@ -323,26 +305,23 @@ A verbose, tag-based text format popular in enterprise systems.
 
 ### 5.4 CSV (Comma-Separated Values)
 
-**What** - is CSV?
+### What is CSV?
 
 A simple text format for tabular data.
 
-**Example** -
-
+#### Example
 ```csv
 name,age,email
 Alice,30,alice@example.com
 Bob,25,bob@example.com
 ```
 
-**Pros** -
-
+#### Pros
 - **Simple**: Easy to read and write
 - **Compact**: More compact than JSON/XML for tabular data
 - **Widely supported**: Excel, databases, data tools
 
-**Cons** -
-
+#### Cons
 - **No schema**: Column names optional, no type information
 - **Escaping issues**: Commas, quotes, newlines need special handling
 - **No nested structures**: Flat data only
@@ -354,23 +333,20 @@ Bob,25,bob@example.com
 
 Binary formats encode data as compact byte sequences instead of human-readable text.
 
-**Examples** -
-
+#### Examples
 - **MessagePack**: Binary JSON
 - **BSON**: Binary JSON (used by MongoDB)
 - **Protocol Buffers (Protobuf)**: Google's format
 - **Thrift**: Facebook's format
 - **Avro**: Apache's format
 
-**Pros** -
-
+#### Pros
 - **Compact**: Much smaller than text formats
 - **Fast parsing**: Binary parsing is faster
 - **Schema support**: Enforce structure and types
 - **Efficient**: Better for network/storage
 
-**Cons** -
-
+#### Cons
 - **Not human-readable**: Need tools to inspect
 - **Schema required**: Must distribute schema definitions
 - **Complexity**: More setup than JSON

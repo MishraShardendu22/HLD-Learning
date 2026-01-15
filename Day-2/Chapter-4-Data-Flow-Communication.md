@@ -94,7 +94,7 @@ A **protocol** defines the rules for how systems communicate — message format,
 
 ### 4.1 Synchronous Communication
 
-#### Definition -
+#### Definition
 
 **Synchronous** means the sender **waits** for a response before continuing.
 
@@ -131,7 +131,7 @@ print(user["name"])
 
 **Asynchronous** means the sender **doesn't wait** for a response — it continues processing.
 
-#### Characteristics -
+#### Characteristics
 
 - **Non-blocking**: Caller continues immediately
 - **Deferred feedback**: Response comes later (callback, event)
@@ -145,13 +145,13 @@ producer.send("email-queue", {"to": "user@example.com", "subject": "Welcome"})
 print("Email queued!")  # Returns immediately, email sent later
 ```
 
-#### Pros -
+#### Pros
 
 - **Scalability**: Doesn't block on slow operations
 - **Resilience**: Failures are isolated (retry later)
 - **Throughput**: Handle more requests concurrently
 
-#### Cons -
+#### Cons
 
 - More complex (callbacks, promises, error handling)
 - Harder to debug (distributed tracing needed)
@@ -161,12 +161,10 @@ print("Email queued!")  # Returns immediately, email sent later
 
 ### 4.3 One-Way Communication
 
-**Definition** -
-
+#### Definition
 Sender sends a message and **doesn't expect a response**.
 
-**Examples** -
-
+#### Examples
 - **Fire-and-forget**: Send metrics to logging service
 - **Notifications**: Push notification to mobile device
 - **Events**: Publish event to message bus
@@ -182,17 +180,14 @@ logger.log("User 123 logged in")  # No response needed
 
 ### 4.4 Two-Way Communication
 
-**Definition** -
-
+#### Definition
 Sender sends a message and **expects a response**.
 
-**Examples** -
-
+#### Examples
 - **Request-response**: REST API, RPC
 - **Bidirectional streaming**: WebSocket, gRPC streaming
 
-**Use Case** -
-
+#### Use Case
 ```python
 # Two-way: REST API
 response = api.get_user(123)  # Expects user data back
@@ -453,7 +448,7 @@ You cook pizza yourself — no communication needed.
 
 ### When Asynchronous is Better
 
-#### Use Cases -
+#### Use Cases
 
 - **Long-running tasks**: Video encoding, report generation
 - **Non-critical operations**: Sending emails, logging
@@ -598,8 +593,7 @@ The **actor model** is a programming model where "actors" are independent units 
 - Communicate via asynchronous messages
 - Process one message at a time (no shared state)
 
-**Characteristics** -
-
+#### Characteristics
 - **Concurrency**: Actors run in parallel
 - **Isolation**: No shared memory (no race conditions)
 - **Location transparency**: Actors can be on different machines
@@ -623,8 +617,7 @@ class UserActor:
 
 Each user has their own actor → no locking needed!
 
-**Use Cases** -
-
+#### Use Cases
 - **Distributed systems**: Erlang (WhatsApp, Discord)
 - **Gaming**: Real-time multiplayer games
 - **IoT**: Millions of independent devices
